@@ -32,20 +32,12 @@ def testing():
 @main_bp.route("/save_emails", methods=["POST", "GET"])
 def save_emails():
     event_id = request.args.get('event_id', type=int)
-    email_receiver = request.args.get('email_receiver', type=str) 
-    email_sender = request.args.get('email_sender', type=str) 
     email_subject = request.args.get('email_subject', type=str) 
     email_content = request.args.get('email_content', type=str)
     timestamp = request.args.get('timestamp', type=str)
 
-    # TODO: Below is just for testing
-    email_sender = "sender@example.com"
-    email_receiver = "receiver@example.com"
-
     data = {
         "event_id": event_id, 
-        "email_sender": email_sender, 
-        "email_receiver": email_receiver, 
         "email_subject": email_subject, 
         "email_content": email_content, 
         "timestamp": timestamp
@@ -56,8 +48,6 @@ def save_emails():
         if request.method == "POST":
             saved_data = AutoEmail(
                 event_id=event_id,
-                email_sender=email_sender, 
-                email_receiver=email_receiver, 
                 email_subject=email_subject, 
                 email_content=email_content, 
                 timestamp=timestamp
@@ -76,8 +66,10 @@ def save_emails():
         error_message = ""
         if "message" not in e.__dir__() and "orig" in e.__dir__():
             error_message = e.orig
-        else:
+        elif "message" in e.__dir__():
             error_message = e.message
+        else:
+            error_message = e
         return {
             "message": str(error_message),
         }, 400
