@@ -29,4 +29,7 @@ def create_app(test_config=None):
     from .views import main_bp
     app.register_blueprint(main_bp)
 
+    with app.app_context():
+        db.create_all()
+        
     return app

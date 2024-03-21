@@ -5,8 +5,6 @@ from .db_and_mail import db
 # db Model
 class AutoEmail(db.Model):
     event_id = db.Column(db.Integer, primary_key=True)
-    email_sender = db.Column(db.String, nullable=False)
-    email_receiver = db.Column(db.String, nullable=False)
     email_subject = db.Column(db.String, nullable=False)
     email_content = db.Column(db.String, nullable=False)
     sent = db.Column(db.Boolean, default=False)
@@ -18,6 +16,15 @@ class AutoEmail(db.Model):
             "email_subject": self.email_subject,
             "email_content": self.email_content,
             "timestamp": self.timestamp
+        }
+
+class Recipients(db.Model):
+    _id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String, nullable=False)
+    
+    def to_json(self):
+        return {
+            "email": self.email,
         }
 
 # schema validate json
@@ -38,13 +45,4 @@ email_schema = {
     },
     "required": ["event_id", "email_subject", "email_content", "timestamp"]
 }
-
-
-# WTForm model
-class EmailForm(Form):
-    event_id = IntegerField('Event Id', validators=[DataRequired()])
-    email_subject = StringField('Email Subject', validators=[DataRequired()])
-    email_content = StringField('Email Content', validators=[DataRequired()])
-    timestamp = DateTimeField('Timestamp', format='%Y-%m-%dT%H:%M')
-
 
