@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %} Home Page {% endblock %}
+
+{% block content %} 
+
+<form action="#" method="post" class="email-form">
+    {{ form.username.label }} {{ form.username(size=20) }} <br>
+    {{ form.age.label }} {{ form.age() }} <br>
+    {{ form.email.label }} {{ form.email(size=30) }} <br>
+    {{ form.subscribe.label }} {{ form.subscribe() }} <br>
+    <div class="mb-3 w-100 d-flex justify-content-center">
+        <input class="btn btn-primary w-25" type="submit" value="Submit">
+    </div>
+</form>
+
+{% endblock %}

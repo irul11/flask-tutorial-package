@@ -1,0 +1,15 @@
+[project]
+name = "mainapp"
+version = "1.0.0"
+description = "The basic app for schedule email",
+authors = [
+    { name="Amirul Taqiy", email="amtaqiy11@gmail.com" },
+],
+readme = "README.md"
+dependencies = [
+    "flask",
+]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"

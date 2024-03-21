@@ -1,0 +1,17 @@
+body {
+    height: 100vh;
+    min-height: 200px;
+}
+
+.content {
+    height: calc(100% - 56px);
+}
+
+.email-form {
+    min-width: 200px;
+    width: 50%;
+}
+
+.action-anchor {
+    display: inline-block;
+}

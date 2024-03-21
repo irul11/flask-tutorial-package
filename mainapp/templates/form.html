@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %} Home Page {% endblock %}
+
+{% block content %} 
+    {% with messages = get_flashed_messages(category_filter=["form_error"]) %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="container mb-4 bg-danger text-center text-bg-danger w-50">{{message}}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <form action="#" method="post" class="email-form">
+        <div class="mb-3">
+            <label for="event_id" class="form-label">Event ID</label>
+            {% if data["event_id"] %}
+                <input type="number" class="form-control" id="event_id" name= "event_id" placeholder="Event ID" value="{{data["event_id"]}}" readonly>
+            {% else %}
+                <input type="number" class="form-control" id="event_id" name= "event_id" placeholder="Event ID" value="{{data["event_id"]}}" required>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="email_subject" class="form-label">Email subject</label>
+            <input type="text" class="form-control" id="email_subject" name= "email_subject" placeholder="Email subject" value="{{data["email_subject"]}}"required>
+        </div>
+        <div class="mb-3">
+            <label for="email_content" class="form-label">Email content</label>
+            <textarea class="form-control" rows="5" id="email_content" name= "email_content" placeholder="Email content" required>{{data["email_content"]}}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="timestamp" class="form-label">Time sent</label>
+            <input type="datetime-local" class="form-control" id="timestamp" name= "timestamp" min="{{ new_date }}" value="{{data["timestamp"]}}" required>
+        </div>
+        <div class="mb-3 w-100 d-flex justify-content-center">
+            <input class="btn btn-primary w-25" type="submit" value="Submit">
+        </div>
+    </form>
+    <p>{{data}}</p>
+{% endblock %}
