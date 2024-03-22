@@ -29,7 +29,7 @@ def create_app():
 
         # Add task/scheduler for handling checking email from database
         scheduler = BackgroundScheduler()
-        scheduler.add_job(func=background_task, args=(app, mail), trigger='interval', seconds=1, max_instances=1)
+        scheduler.add_job(func=background_task, args=(app, mail), trigger='interval', seconds=1, max_instances=10)
         scheduler.start()
 
     return app
