@@ -1,5 +1,5 @@
-from datetime import datetime
 from .db_and_mail import db
+
 
 # db Model
 class AutoEmail(db.Model):
@@ -34,8 +34,8 @@ email_schema = {
     "type": "object",
     "properties": {
         "event_id": {"type": "integer"},
-        "email_sender": {"type": "string", "format": "email"},
-        "email_receiver": {"type": "string", "format": "email"},
+        # "email_sender": {"type": "string", "format": "email"},
+        # "email_receiver": {"type": "string", "format": "email"},
         "email_subject": {"type": "string"},
         "email_content": {"type": "string"},
         "sent": {"type": "boolean"},

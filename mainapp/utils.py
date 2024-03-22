@@ -10,7 +10,7 @@ def background_task(app, mail):
         email_data = AutoEmail.query.filter_by(timestamp=datetime_now, sent=False).all()  
         recipients = Recipients.query.all()
         recipients_parsed = list(map(lambda x: x.to_string(), recipients))
-
+        
         if not email_data:
             return 
         

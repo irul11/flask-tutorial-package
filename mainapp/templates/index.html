@@ -4,28 +4,25 @@
 
 {% block content %} 
 
-<h1>Welcome to Home Page</h1>
+<h1>Email sending queue</h1>
 
 <table class="table table-bordered text-center align-middle">
     <thead class="table-primary">
         <tr>
+            <th scope="col">Time Sent (GMT+7)</th>
             <th scope="col">Event ID</th>
             <th scope="col">Email Subject</th>
             <th scope="col">Email Content</th>
-            <th scope="col">Timestamp</th>
-            <th scope="col">Action</th>
         </tr>
     </thead>
     <tbody>
         {% if query %}
             {% for data in query %}
                 <tr>
-                    <th scope="row">{{data.event_id}}</th>
+                    <td><em>{{data.timestamp}}</em></td>
+                    <td scope="row">{{data.event_id}}</td>
                     <td>{{data.email_subject}}</td>
                     <td>{{data.email_content}}</td>
-                    <td>{{data.timestamp}}</td>
-                    <td>
-                    </td>
                 </tr>
             {% endfor %}
         {% else %}

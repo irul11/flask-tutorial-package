@@ -1,8 +1,8 @@
 import os
 from flask import Flask
+from flask_cors import CORS
 from apscheduler.schedulers.background import BackgroundScheduler
 from .utils import background_task
-
 
 
 def create_app():
@@ -31,5 +31,8 @@ def create_app():
         scheduler = BackgroundScheduler()
         scheduler.add_job(func=background_task, args=(app, mail), trigger='interval', seconds=1, max_instances=10)
         scheduler.start()
+
+    # add cors to app
+    CORS(app)
 
     return app
