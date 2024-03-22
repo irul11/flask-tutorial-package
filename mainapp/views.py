@@ -1,15 +1,16 @@
-from flask import Blueprint, g, render_template, request, current_app
-from flask_mail import Message
+from flask import Blueprint, render_template, request
 from jsonschema import validate, ValidationError
 from datetime import datetime
-from .models import AutoEmail, email_schema
-from .db_and_mail import mail, db
+from .models import AutoEmail, Recipients, email_schema
+from .db_and_mail import db
+
 
 main_bp = Blueprint('main_bp', __name__)
+
 @main_bp.route("/")
 @main_bp.route("/home")
 def home():
-    email_data = AutoEmail.query.order_by(AutoEmail.timestamp).limit(10).all()    
+    email_data = AutoEmail.query.filter_by(sent=False).order_by(AutoEmail.timestamp).limit(15).all()    
     parsed_data = list(map(lambda x: x.to_json(), email_data))
     
     return render_template("index.html", query=parsed_data)
@@ -68,3 +69,17 @@ def save_emails():
     return {
         "data": data
     }
+
+
+@main_bp.route("/recipients", methods=["POST", "DELETE"])
+def save_recipients():
+    email = request.args.get('email', type=str) 
+    if request.method == "POST":
+        saved_data = Recipients(
+            email=email,
+        )
+        db.session.add(saved_data)
+        db.session.commit()
+        return {
+            "message": "save recipient successful"
+        }
