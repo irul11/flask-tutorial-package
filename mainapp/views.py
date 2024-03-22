@@ -1,6 +1,7 @@
 from flask import Blueprint, g, render_template, request, current_app
 from flask_mail import Message
 from jsonschema import validate, ValidationError
+from datetime import datetime
 from .models import AutoEmail, email_schema
 from .db_and_mail import mail, db
 
@@ -8,28 +9,12 @@ main_bp = Blueprint('main_bp', __name__)
 @main_bp.route("/")
 @main_bp.route("/home")
 def home():
-    email_data = AutoEmail.query.all()    
+    email_data = AutoEmail.query.order_by(AutoEmail.timestamp).limit(10).all()    
     parsed_data = list(map(lambda x: x.to_json(), email_data))
     
     return render_template("index.html", query=parsed_data)
 
-@main_bp.route("/testing")
-def testing():
-    try:
-        # Create message object
-        msg = Message('Testing Flask-Mail',
-                    sender='your-email@example.com',
-                    recipients=['amtaqiy11@gmail.com'])
-        # Add email body
-        msg.body = 'This is a test email sent from Flask-Mail'
-        
-        # Send email
-        mail.send(msg)
-        return 'Email sent successfully!'
-    except Exception as e:
-        return str(e)
-
-@main_bp.route("/save_emails", methods=["POST", "GET"])
+@main_bp.route("/save_emails", methods=["POST"])
 def save_emails():
     event_id = request.args.get('event_id', type=int)
     email_subject = request.args.get('email_subject', type=str) 
@@ -45,6 +30,12 @@ def save_emails():
     
     try:
         validate(instance=(data), schema=email_schema)
+
+        current_timestamp = datetime.now().timestamp()
+        email_timestamp = datetime.fromisoformat(timestamp).timestamp()
+        if email_timestamp < current_timestamp:
+            raise ValidationError("the timestamp must be set for the future")
+
         if request.method == "POST":
             saved_data = AutoEmail(
                 event_id=event_id,
@@ -77,16 +68,3 @@ def save_emails():
     return {
         "data": data
     }
-
-# def checking_email():
-#     with app.app_context():
-#         while True:
-#             try:
-#                 # Use a separate database session within the thread
-#                 with app.app_context():
-#                     email_data = AutoEmail.query.all()
-#                     app.logger.info(email_data)
-#             except Exception as e:
-#                 app.logger.error(f"Error in background task: {e}")
-#             time.sleep(10)
-    

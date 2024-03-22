@@ -1,5 +1,4 @@
-from wtforms import Form, StringField, IntegerField, EmailField, BooleanField, DateTimeField
-from wtforms.validators import DataRequired, Email, NumberRange
+from datetime import datetime
 from .db_and_mail import db
 
 # db Model
@@ -15,17 +14,20 @@ class AutoEmail(db.Model):
             "event_id": self.event_id,
             "email_subject": self.email_subject,
             "email_content": self.email_content,
-            "timestamp": self.timestamp
+            "timestamp": self.timestamp,
         }
 
 class Recipients(db.Model):
     _id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, nullable=False)
-    
+
     def to_json(self):
         return {
             "email": self.email,
         }
+    
+    def to_string(self):
+        return self.email
 
 # schema validate json
 email_schema = {
